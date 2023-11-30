@@ -76,4 +76,10 @@ class authController extends Controller
 
         return redirect()->route('login')->with('succsess', 'berhasil register');
     }
+
+    protected function forgotPasswordPage()
+    {
+        $title = 'Smexafess';
+        return response()->view('Auth.forgotPassword', compact('title'));
+    }
 }

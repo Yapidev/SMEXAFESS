@@ -22,6 +22,7 @@ Route::middleware('guest')->controller(authController::class)->group(function ()
     // Return view
     Route::get('login', 'loginPage')->name('login');
     Route::get('register', 'registerPage')->name('register');
+    Route::get('forgotPassword', 'forgotPasswordPage')->name('forgotPassword');
 
     // Return process
     Route::post('loginProcess', 'loginProcess')->name('loginProcess');

@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- Mirrored from demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/html/main/authentication-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 06 Jul 2023 02:01:04 GMT -->
-
 <head>
     <!--  Title -->
     <title>{{ $title }}</title>
@@ -59,7 +57,7 @@
                                 <div class="row">
                                     <div class="col-6 mb-2 mb-sm-0">
                                         <a class="btn btn-white text-dark border fw-normal d-flex align-items-center justify-content-center rounded-2 py-8"
-                                            href="{{route('redirectToGoogle')}}" role="button">
+                                            href="{{ route('redirectToGoogle') }}" role="button">
                                             <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/svgs/google-icon.svg"
                                                 alt="" class="img-fluid me-2" width="18" height="18">
                                             <span class="d-none d-sm-block me-1 flex-shrink-0">Sign in with</span>Google
@@ -102,14 +100,14 @@
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mb-4">
                                         <div class="form-check">
-                                            <input class="form-check-input primary" type="checkbox" value=""
-                                                id="flexCheckChecked" checked>
+                                            <input class="form-check-input primary cursor-pointer" name="remember"
+                                                type="checkbox" value="1" id="flexCheckChecked" checked>
                                             <label class="form-check-label text-dark" for="flexCheckChecked">
                                                 Remeber this Device
                                             </label>
                                         </div>
-                                        <a class="text-primary fw-medium"
-                                            href="{{route('forgotPassword')}}">Forgot Password ?</a>
+                                        <a class="text-primary fw-medium" href="{{ route('forgotPassword') }}">Forgot
+                                            Password ?</a>
                                     </div>
                                     <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2">Sign
                                         In</button>
@@ -128,16 +126,24 @@
         </div>
     </div>
 
-    <!--  Import Js Files -->
+    @if (session()->has('error'))
+        <script>
+            toastr.error('{{ session('error') }}');
+        </script>
+    @elseif (session()->has('success'))
+        <script>
+            toastr.success('{{ session('error') }}');
+        </script>
+    @endif
+
     <script src="{{ asset('dist/libs/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('dist/libs/simplebar/dist/simplebar.min.js') }}"></script>
     <script src="{{ asset('dist/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
-    <!--  core files -->
     <script src="{{ asset('dist/js/app.min.js') }}"></script>
     <script src="{{ asset('dist/js/app.init.js') }}"></script>
     <script src="{{ asset('dist/js/app-style-switcher.js') }}"></script>
     <script src="{{ asset('dist/js/sidebarmenu.js') }}"></script>
-
+    <script src="{{ asset('dist/js/plugins/toastr-init.js') }}"></script>
     <script src="{{ asset('dist/js/custom.js') }}"></script>
 </body>
 

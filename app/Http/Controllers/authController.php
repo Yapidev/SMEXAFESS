@@ -15,6 +15,16 @@ class authController extends Controller
     protected function loginPage()
     {
         $title = 'Smexafess';
+
+        if (Auth::check()) {
+            $user = Auth::user();
+            if ($user->role == 'admin') {
+                return redirect()->route('dashboardAdmin');
+            } else {
+                return redirect()->route('dashboardUser');
+            }
+        }
+
         return response()->view('Auth.login', compact('title'));
     }
 
@@ -30,18 +40,18 @@ class authController extends Controller
             'password.min' => 'Password minimal harus memiliki :min karakter.',
         ]);
 
-        $infologin = $request->only('email', 'password');
+        $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember');
 
-        if (Auth::attempt($infologin)) {
+        if (Auth::attempt($credentials, $remember)) {
             $user = Auth::user();
             if ($user->role === 'admin') {
-                return redirect()->route('')->with('success', 'anda berhasil login');
+                return redirect()->route('dashboardAdmin')->with('success', 'Anda berhasil login');
             } elseif ($user->role === 'user') {
-                dd('sukses');
-                return redirect()->route('')->with('success', 'berhasil loogin');
+                return redirect()->route('dashboardUser')->with('success', 'Anda berhasil login');
             }
         } else {
-            return redirect()->back()->with('error', 'akun anda tidak di temukan');
+            return redirect()->back()->with('error', 'Akun anda tidak di temukan');
         }
         return redirect()->route('login')->with('error', 'Email atau Kata Sandi Anda Salah');
     }
@@ -77,7 +87,7 @@ class authController extends Controller
 
         User::create($user);
 
-        return redirect()->route('login')->with('succsess', 'berhasil register');
+        return redirect()->route('login')->with('succsess', 'Anda berhasil register');
     }
 
     protected function forgotPasswordPage()
@@ -115,8 +125,7 @@ class authController extends Controller
 
             return redirect('login');
         } catch (\Exception $e) {
-            dd('gagal');
-            return redirect('/login')->withErrors('Login dengan Google gagal: ' . $e->getMessage());
+            return redirect('login')->with('error', 'Gagal login menggunakan Google');
         }
     }
 }

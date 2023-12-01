@@ -34,9 +34,15 @@ Route::middleware('guest')->controller(authController::class)->group(function ()
 });
 
 Route::prefix('user')->middleware('auth', 'user')->controller(userController::class)->group(function () {
+    // Return view
     Route::get('dashboard', 'dashboardPage')->name('dashboardUser');
+
+    // Return process
 });
 
 Route::prefix('admin')->middleware('auth', 'admin')->controller(adminController::class)->group(function () {
+    // Return view
     Route::get('dashboard', 'dashboardPage')->name('dashboardAdmin');
+
+    // Return process
 });

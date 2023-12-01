@@ -33,6 +33,8 @@ Route::middleware('guest')->controller(authController::class)->group(function ()
     Route::post('registerProcess', 'registerProcess')->name('registerProcess');
 });
 
+Route::post('logout', [authController::class, 'logout'])->name('logoutProcess');
+
 Route::prefix('user')->middleware('auth', 'user')->controller(userController::class)->group(function () {
     // Return view
     Route::get('dashboard', 'dashboardPage')->name('dashboardUser');

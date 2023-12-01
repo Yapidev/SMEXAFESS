@@ -15,16 +15,6 @@ class authController extends Controller
     protected function loginPage()
     {
         $title = 'Smexafess';
-
-        if (Auth::check()) {
-            $user = Auth::user();
-            if ($user->role == 'admin') {
-                return redirect()->route('dashboardAdmin');
-            } else {
-                return redirect()->route('dashboardUser');
-            }
-        }
-
         return response()->view('Auth.login', compact('title'));
     }
 
@@ -41,9 +31,8 @@ class authController extends Controller
         ]);
 
         $credentials = $request->only('email', 'password');
-        $remember = $request->has('remember');
 
-        if (Auth::attempt($credentials, $remember)) {
+        if (Auth::attempt($credentials)) {
             $user = Auth::user();
             if ($user->role === 'admin') {
                 return redirect()->route('dashboardAdmin')->with('success', 'Anda berhasil login');
@@ -123,9 +112,19 @@ class authController extends Controller
                 Auth::loginUsingId($newUser);
             }
 
-            return redirect('login');
+            return redirect()->route('dashboardUser');
         } catch (\Exception $e) {
             return redirect('login')->with('error', 'Gagal login menggunakan Google');
+        }
+    }
+
+    protected function logout()
+    {
+        try {
+            Auth::logout();
+            return redirect()->route('login');
+        } catch (\Throwable $th) {
+            return back();
         }
     }
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\adminController;
 use App\Http\Controllers\authController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\userController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,20 +21,26 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Route unauthorize user
 Route::middleware('guest')->controller(authController::class)->group(function () {
     // Return view
     Route::get('login', 'loginPage')->name('login');
     Route::get('register', 'registerPage')->name('register');
     Route::get('forgotPassword', 'forgotPasswordPage')->name('forgotPassword');
-    Route::get('login/google', 'redirectToGoogle')->name('redirectToGoogle');
-    Route::get('login/google/callback', 'handleGoogleCallback')->name('handleGoogleCallback');
 
     // Return process
     Route::post('loginProcess', 'loginProcess')->name('loginProcess');
     Route::post('registerProcess', 'registerProcess')->name('registerProcess');
+    Route::get('login/google', 'redirectToGoogle')->name('redirectToGoogle');
+    Route::get('login/google/callback', 'handleGoogleCallback')->name('handleGoogleCallback');
 });
 
-Route::post('logout', [authController::class, 'logout'])->name('logoutProcess');
+// Only middleware auth
+Route::middleware('auth')->group(function () {
+    Route::get('profile', [ProfileController::class, 'profilePage'])->name('profilePage');
+    Route::post('logout', [authController::class, 'logout'])->name('logoutProcess');
+});
+
 
 Route::prefix('user')->middleware('auth', 'user')->controller(userController::class)->group(function () {
     // Return view
@@ -42,6 +49,7 @@ Route::prefix('user')->middleware('auth', 'user')->controller(userController::cl
     // Return process
 });
 
+// Route Admin
 Route::prefix('admin')->middleware('auth', 'admin')->controller(adminController::class)->group(function () {
     // Return view
     Route::get('dashboard', 'dashboardPage')->name('dashboardAdmin');

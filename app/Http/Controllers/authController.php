@@ -31,6 +31,7 @@ class authController extends Controller
         ]);
 
         $credentials = $request->only('email', 'password');
+        $user = User::where('email', $credentials['email'])->first();
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
@@ -39,8 +40,10 @@ class authController extends Controller
             } elseif ($user->role === 'user') {
                 return redirect()->route('dashboardUser')->with('success', 'Anda berhasil login');
             }
-        } else {
-            return redirect()->back()->with('error', 'Akun anda tidak di temukan');
+        } else if (!$user) {
+            return redirect()->back()->withErrors(['email' => 'Akun anda tidak di temukan'])->withInput();
+        } else if (!Auth::attempt($credentials)) {
+            return redirect()->back()->withErrors(['password' => 'Kata sandi Anda salah'])->withInput();
         }
         return redirect()->route('login')->with('error', 'Email atau Kata Sandi Anda Salah');
     }

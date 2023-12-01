@@ -18,6 +18,11 @@
         href="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/favicon.ico" />
     <!-- Core Css -->
     <link id="themeColors" rel="stylesheet" href="../../dist/css/style.min.css" />
+    <style>
+        #toast-container {
+            top: 15px;
+        }
+    </style>
 </head>
 
 <body>
@@ -93,7 +98,7 @@
                                         <label for="text-password" class="form-label">Password</label>
                                         <input type="password"
                                             class="form-control @error('password')is-invalid @enderror"
-                                            id="text-password" name="password">
+                                            id="text-password" name="password" value="{{old('password')}}">
                                         @error('password')
                                             <p class="text-danger">{{ $message }}</p>
                                         @enderror
@@ -126,16 +131,6 @@
         </div>
     </div>
 
-    @if (session()->has('error'))
-        <script>
-            toastr.error('{{ session('error') }}');
-        </script>
-    @elseif (session()->has('success'))
-        <script>
-            toastr.success('{{ session('error') }}');
-        </script>
-    @endif
-
     <script src="{{ asset('dist/libs/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('dist/libs/simplebar/dist/simplebar.min.js') }}"></script>
     <script src="{{ asset('dist/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
@@ -145,6 +140,21 @@
     <script src="{{ asset('dist/js/sidebarmenu.js') }}"></script>
     <script src="{{ asset('dist/js/plugins/toastr-init.js') }}"></script>
     <script src="{{ asset('dist/js/custom.js') }}"></script>
+
+    <script>
+        toastr.options = {
+            "positionClass": "toast-top-center",
+            "fadeIn": 300,
+            "fadeOut": 1000,
+            "timeOut": 3000,
+        };
+        @if (session()->has('error'))
+            toastr.error('{{ session('error') }}');
+        @elseif (session()->has('success'))
+            toastr.success('{{ session('error') }}');
+        @endif
+    </script>
+
 </body>
 
 <!-- Mirrored from demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/html/main/authentication-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 06 Jul 2023 02:01:04 GMT -->

@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\adminController;
 use App\Http\Controllers\authController;
+use App\Http\Controllers\userController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,8 +25,18 @@ Route::middleware('guest')->controller(authController::class)->group(function ()
     Route::get('login', 'loginPage')->name('login');
     Route::get('register', 'registerPage')->name('register');
     Route::get('forgotPassword', 'forgotPasswordPage')->name('forgotPassword');
+    Route::get('login/google', 'redirectToGoogle')->name('redirectToGoogle');
+    Route::get('login/google/callback', 'handleGoogleCallback')->name('handleGoogleCallback');
 
     // Return process
     Route::post('loginProcess', 'loginProcess')->name('loginProcess');
     Route::post('registerProcess', 'registerProcess')->name('registerProcess');
+});
+
+Route::prefix('user')->middleware('auth', 'user')->controller(userController::class)->group(function () {
+    Route::get('dashboard', 'dashboardPage')->name('dashboardUser');
+});
+
+Route::prefix('admin')->middleware('auth', 'admin')->controller(adminController::class)->group(function () {
+    Route::get('dashboard', 'dashboardPage')->name('dashboardAdmin');
 });

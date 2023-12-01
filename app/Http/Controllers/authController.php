@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Str;
 
 class authController extends Controller
 {
@@ -81,5 +84,39 @@ class authController extends Controller
     {
         $title = 'Smexafess';
         return response()->view('Auth.forgotPassword', compact('title'));
+    }
+
+    protected function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    protected function handleGoogleCallback()
+    {
+        try {
+            $user = Socialite::driver('google')->user();
+            $existingAccount = User::where('email', $user->email)->first();
+
+            if ($existingAccount) {
+                Auth::login($existingAccount);
+            } else {
+                $data = [
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'role' => 'user',
+                    'password' => Str::random(16),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+
+                $newUser = DB::table('users')->insertGetId($data);
+                Auth::loginUsingId($newUser);
+            }
+
+            return redirect('login');
+        } catch (\Exception $e) {
+            dd('gagal');
+            return redirect('/login')->withErrors('Login dengan Google gagal: ' . $e->getMessage());
+        }
     }
 }

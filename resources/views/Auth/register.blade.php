@@ -59,7 +59,7 @@
                                 <div class="row">
                                     <div class="col-6 mb-2 mb-sm-0">
                                         <a class="btn btn-white text-dark border fw-normal d-flex align-items-center justify-content-center rounded-2 py-8"
-                                            href="javascript:void(0)" role="button">
+                                            href="{{ route('redirectToGoogle') }}" role="button">
                                             <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/svgs/google-icon.svg"
                                                 alt="" class="img-fluid me-2" width="18" height="18">
                                             <span class="d-none d-sm-block me-1 flex-shrink-0">Sign in with</span>Google

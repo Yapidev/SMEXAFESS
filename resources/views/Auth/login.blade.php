@@ -60,20 +60,12 @@
                                 <h2 class="mb-3 fs-7 fw-bolder">Welcome to Smexafess</h2>
                                 <p class=" mb-9">Your Admin Dashboard</p>
                                 <div class="row">
-                                    <div class="col-6 mb-2 mb-sm-0">
+                                    <div class="col-12 mb-2 mb-sm-0">
                                         <a class="btn btn-white text-dark border fw-normal d-flex align-items-center justify-content-center rounded-2 py-8"
                                             href="{{ route('redirectToGoogle') }}" role="button">
                                             <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/svgs/google-icon.svg"
                                                 alt="" class="img-fluid me-2" width="18" height="18">
                                             <span class="d-none d-sm-block me-1 flex-shrink-0">Sign in with</span>Google
-                                        </a>
-                                    </div>
-                                    <div class="col-6">
-                                        <a class="btn btn-white text-dark border fw-normal d-flex align-items-center justify-content-center rounded-2 py-8"
-                                            href="javascript:void(0)" role="button">
-                                            <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/svgs/facebook-icon.svg"
-                                                alt="" class="img-fluid me-2" width="18" height="18">
-                                            <span class="d-none d-sm-block me-1 flex-shrink-0">Sign in with</span>FB
                                         </a>
                                     </div>
                                 </div>
@@ -104,13 +96,6 @@
                                         @enderror
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mb-4">
-                                        <div class="form-check">
-                                            <input class="form-check-input primary cursor-pointer" name="remember"
-                                                type="checkbox" value="1" id="flexCheckChecked" checked>
-                                            <label class="form-check-label text-dark" for="flexCheckChecked">
-                                                Remeber this Device
-                                            </label>
-                                        </div>
                                         <a class="text-primary fw-medium" href="{{ route('forgotPassword') }}">Forgot
                                             Password ?</a>
                                     </div>
@@ -151,7 +136,7 @@
         @if (session()->has('error'))
             toastr.error('{{ session('error') }}');
         @elseif (session()->has('success'))
-            toastr.success('{{ session('error') }}');
+            toastr.success('{{ session('success') }}');
         @endif
     </script>
 

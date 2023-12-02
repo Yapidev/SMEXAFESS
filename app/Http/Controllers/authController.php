@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class authController extends Controller
 {
@@ -73,7 +75,7 @@ class authController extends Controller
         $user = [
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => bcrypt($request->password),
 
         ];
 
@@ -102,11 +104,12 @@ class authController extends Controller
             if ($existingAccount) {
                 Auth::login($existingAccount);
             } else {
+                $pass = Str::random(16);
                 $data = [
                     'name' => $user->name,
                     'email' => $user->email,
                     'role' => 'user',
-                    'password' => Str::random(16),
+                    'password' => bcrypt($pass),
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
@@ -128,6 +131,82 @@ class authController extends Controller
             return redirect()->route('login');
         } catch (\Throwable $th) {
             return back();
+        }
+    }
+
+    protected function sendResetLink(Request $request)
+    {
+        try {
+            $request->validate(['email' => 'required|email'], [
+                'email.required' => 'Email diperlukan.',
+                'email.email' => 'Email harus berupa alamat email yang valid.',
+            ]);
+
+            $user = User::where('email', $request->email)->first();
+            if (!$user) {
+                throw ValidationException::withMessages(['email' => 'Email tidak ditemukan']);
+            }
+
+            $status = Password::sendResetLink(
+                $request->only('email')
+            );
+
+            if ($status === Password::RESET_LINK_SENT) {
+                return back()->with('success', 'Reset link telah dikirim. Silakan cek email Anda untuk petunjuk lebih lanjut.');
+            } else {
+                return back()->withErrors(['email' => 'Tunggu beberapa saat lagi untuk kirim email']);
+            }
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors());
+        } catch (\Exception $e) {
+            return back()->withErrors(['email' => 'Terjadi kesalahan saat mengirim reset link.']);
+        }
+    }
+
+    protected function resetPassword()
+    {
+        $title = 'Smexafess';
+        return response()->view('Auth.forgotPassword', compact('title'));
+    }
+
+    protected function updatePassword(Request $request)
+    {
+        try {
+            $request->validate([
+                'token' => 'required',
+                'email' => 'required|email',
+                'password' => 'required|min:6',
+                'confirmPassword' => 'required|same:password',
+            ], [
+                'token.required' => 'Token diperlukan.',
+                'email.required' => 'Email diperlukan.',
+                'email.email' => 'Email harus berupa alamat email yang valid.',
+                'password.required' => 'Password diperlukan.',
+                'password.min' => 'Password harus terdiri dari minimal :min karakter.',
+                'confirmPassword.required' => 'Konfirmasi password diperlukan.',
+                'confirmPassword.same' => 'Konfirmasi password harus sama dengan password.',
+            ]);
+
+            $status = Password::reset(
+                $request->only('email', 'password', 'token'),
+                function (User $user, string $password) {
+                    $user->forceFill([
+                        'password' => bcrypt($password)
+                    ])->setRememberToken(Str::random(60));
+
+                    $user->save();
+
+                    event(new PasswordReset($user));
+                }
+            );
+
+            return $status === Password::PASSWORD_RESET
+                ? redirect()->route('login')->with('success', 'Password anda berhasil diubah')
+                : back()->with('error', 'Terjadi kesalahan saat reset password');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors());
+        } catch (\Exception $e) {
+            return back()->withErrors(['email' => 'Terjadi kesalahan saat memperbarui password.']);
         }
     }
 }

@@ -2045,23 +2045,6 @@
                                                 </a>
                                             </div>
                                             <div class="d-grid py-4 px-7 pt-8">
-                                                <div
-                                                    class="upgrade-plan bg-light-primary position-relative overflow-hidden rounded-4 p-4 mb-9">
-                                                    <div class="row">
-                                                        <div class="col-6">
-                                                            <h5 class="fs-4 mb-3 w-50 fw-semibold text-dark">Unlimited
-                                                                Access</h5>
-                                                            <button
-                                                                class="btn btn-primary text-white">Upgrade</button>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <div class="m-n4">
-                                                                <img src="../../dist/images/backgrounds/unlimited-bg.png"
-                                                                    alt="" class="w-100">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                                 <form action="{{ route('logoutProcess') }}" method="POST">
                                                     @csrf
                                                     <button type="submit" class="btn btn-outline-primary w-100">Log Out</button>

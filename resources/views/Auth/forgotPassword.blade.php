@@ -69,17 +69,20 @@
                                                 email you a link to reset your password.
                                             </p>
                                         </div>
-                                        <form action="{{ route('sendResetLink') }}" method="POST">
+                                        <form action="{{ route('sendResetLink') }}" method="POST"
+                                            class="{{ $errors->any() ? '' : 'needs-validation' }}" novalidate>
                                             @csrf
                                             <div class="mb-3">
                                                 <label for="exampleInputEmail1" class="form-label">Email
                                                     address</label>
                                                 <input type="email"
                                                     class="form-control @error('email') is-invalid @enderror"
-                                                    id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
-                                                @error('email')
-                                                    <p class="text-danger">{{ $message }}</p>
-                                                @enderror
+                                                    id="exampleInputEmail1" aria-describedby="emailHelp" name="email"
+                                                    required>
+                                                <div class="valid-feedback">Bagus!</div>
+                                                <div class="invalid-feedback">
+                                                    {{ $errors->has('email') ? $errors->first('email') : 'Isi dengan email yang valid!' }}
+                                                </div>
                                             </div>
                                             <button type="submit" class="btn btn-primary w-100 py-8 mb-3">Forgot
                                                 Password</button>
@@ -98,34 +101,41 @@
                                         <div class="mb-5">
                                             <h2 class="fw-bolder fs-7 mb-3">Perbarui password anda</h2>
                                             <p class="mb-0 ">
-                                                Reset password untuk <span class="fw-bold">{{ request()->email }}</span>. Silahkan perbarui password
-                                                anda, <a href="{{route('forgotPassword')}}">Klik disini jika ingin mengganti email tertuju</a>.
+                                                Reset password untuk <span
+                                                    class="fw-bold">{{ request()->email }}</span>. Silahkan perbarui
+                                                password
+                                                anda, <a href="{{ route('forgotPassword') }}">Klik disini jika ingin
+                                                    mengganti email tertuju</a>.
                                             </p>
                                         </div>
-                                        <form action="{{ route('password.update') }}" method="POST">
+                                        <form action="{{ route('password.update') }}" method="POST"
+                                            class="{{ $errors->any() ? '' : 'needs-validation' }}" novalidate>
                                             @csrf
-                                            <input type="hidden" name="token" value="{{request()->token}}">
-                                            <input type="hidden" name="email" value="{{request()->email}}">
+                                            <input type="hidden" name="token" value="{{ request()->token }}">
+                                            <input type="hidden" name="email" value="{{ request()->email }}">
                                             <div class="mb-3">
                                                 <label for="exampleInputEmail1" class="form-label">Password baru</label>
                                                 <input type="password"
                                                     class="form-control @error('password') is-invalid @enderror"
-                                                    id="exampleInputEmail1" aria-describedby="emailHelp"
-                                                    name="password">
-                                                @error('password')
-                                                    <p class="text-danger">{{ $message }}</p>
-                                                @enderror
+                                                    id="passwordInput" aria-describedby="emailHelp" name="password"
+                                                    required minlength="6">
+                                                <div class="valid-feedback">Bagus!</div>
+                                                <div class="invalid-feedback">
+                                                    {{ $errors->has('password') ? $errors->first('password') : 'Isi dengan password yang valid dan minimal 6 karakter!' }}
+                                                </div>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="exampleInputEmail1" class="form-label">Konfirmasi
                                                     password</label>
                                                 <input type="password"
                                                     class="form-control @error('confirmPassword') is-invalid @enderror"
-                                                    id="exampleInputEmail2" aria-describedby="emailHelp"
-                                                    name="confirmPassword">
-                                                @error('confirmPassword')
-                                                    <p class="text-danger">{{ $message }}</p>
-                                                @enderror
+                                                    id="confirmPasswordInput" aria-describedby="emailHelp"
+                                                    name="confirmPassword" data-validation-match-match="password"
+                                                    required minlength="">
+                                                <div class="valid-feedback">Bagus!</div>
+                                                <div class="invalid-feedback">
+                                                    {{ $errors->has('confirmPassword') ? $errors->first('confirmPassword') : 'Isi konfirmasi password dan samakan dengan password baru!' }}
+                                                </div>
                                             </div>
                                             <button type="submit" class="btn btn-primary w-100 py-8 mb-3">Forgot
                                                 Password</button>
@@ -153,8 +163,10 @@
     <script src="../../dist/js/app-style-switcher.js"></script>
     <script src="../../dist/js/sidebarmenu.js"></script>
     <script src="../../dist/js/custom.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('dist/js/plugins/toastr-init.js') }}"></script>
+
+    {{-- Toast Notification --}}
     <script>
         toastr.options = {
             "positionClass": "toast-top-center",
@@ -169,6 +181,45 @@
         @endif
     </script>
 
+    {{-- Prevent Default Function for submittion form --}}
+    <script>
+        (function() {
+            "use strict";
+            window.addEventListener(
+                "load",
+                function() {
+                    var forms = document.getElementsByClassName("needs-validation");
+                    var validation = Array.prototype.filter.call(
+                        forms,
+                        function(form) {
+                            form.addEventListener(
+                                "submit",
+                                function(event) {
+                                    if (form.checkValidity() === false) {
+                                        event.preventDefault();
+                                        event.stopPropagation();
+                                    }
+                                    form.classList.add("was-validated");
+                                },
+                                false
+                            );
+                        }
+                    );
+                },
+                false
+            );
+        })();
+    </script>
+
+    {{-- Set Minlength --}}
+    <script>
+        $(document).ready(function() {
+            $('#passwordInput').on('input', function() {
+                let passwordLength = $(this).val().length;
+                $('#confirmPasswordInput').attr('minlength', passwordLength);
+            });
+        });
+    </script>
 </body>
 
 <!-- Mirrored from demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/html/main/authentication-forgot-password.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 06 Jul 2023 02:01:04 GMT -->

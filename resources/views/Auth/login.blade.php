@@ -76,24 +76,28 @@
                                     <span
                                         class="border-top w-100 position-absolute top-50 start-50 translate-middle"></span>
                                 </div>
-                                <form action="{{ route('loginProcess') }}" method="POST">
+                                <form action="{{ route('loginProcess') }}" method="POST"
+                                    class="{{ $errors->any() ? '' : 'needs-validation' }}" novalidate>
                                     @csrf
                                     <div class="mb-3">
                                         <label for="text-email" class="form-label">Email address</label>
                                         <input type="email" class="form-control @error('email')is-invalid @enderror"
-                                            id="text-email" value="{{ old('email') }}" name="email">
-                                        @error('email')
-                                            <p class="text-danger">{{ $message }}</p>
-                                        @enderror
+                                            id="text-email" value="{{ old('email') }}" name="email" required>
+                                        <div class="valid-feedback">Bagus!</div>
+                                        <div class="invalid-feedback">
+                                            {{ $errors->has('email') ? $errors->first('email') : 'Isi dengan email yang valid!' }}
+                                        </div>
                                     </div>
                                     <div class="mb-4">
                                         <label for="text-password" class="form-label">Password</label>
                                         <input type="password"
                                             class="form-control @error('password')is-invalid @enderror"
-                                            id="text-password" name="password" value="{{old('password')}}">
-                                        @error('password')
-                                            <p class="text-danger">{{ $message }}</p>
-                                        @enderror
+                                            id="text-password" name="password" value="{{ old('password') }}" required
+                                            minlength="6">
+                                        <div class="valid-feedback">Bagus!</div>
+                                        <div class="invalid-feedback">
+                                            {{ $errors->has('password') ? $errors->first('password') : 'Isi dengan password yang valid dan minimal 6 karakter!' }}
+                                        </div>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mb-4">
                                         <a class="text-primary fw-medium" href="{{ route('forgotPassword') }}">Forgot
@@ -126,6 +130,7 @@
     <script src="{{ asset('dist/js/plugins/toastr-init.js') }}"></script>
     <script src="{{ asset('dist/js/custom.js') }}"></script>
 
+    {{-- Toast Notification --}}
     <script>
         toastr.options = {
             "positionClass": "toast-top-center",
@@ -138,6 +143,36 @@
         @elseif (session()->has('success'))
             toastr.success('{{ session('success') }}');
         @endif
+    </script>
+
+    {{-- Prevent Default Function for submittion form --}}
+    <script>
+        (function() {
+            "use strict";
+            window.addEventListener(
+                "load",
+                function() {
+                    var forms = document.getElementsByClassName("needs-validation");
+                    var validation = Array.prototype.filter.call(
+                        forms,
+                        function(form) {
+                            form.addEventListener(
+                                "submit",
+                                function(event) {
+                                    if (form.checkValidity() === false) {
+                                        event.preventDefault();
+                                        event.stopPropagation();
+                                    }
+                                    form.classList.add("was-validated");
+                                },
+                                false
+                            );
+                        }
+                    );
+                },
+                false
+            );
+        })();
     </script>
 
 </body>

@@ -175,7 +175,7 @@ class authController extends Controller
             $request->validate([
                 'token' => 'required',
                 'email' => 'required|email',
-                'password' => 'required|min:6',
+                'password' => 'required|min:6|different:password',
                 'confirmPassword' => 'required|same:password',
             ], [
                 'token.required' => 'Token diperlukan.',
@@ -183,6 +183,7 @@ class authController extends Controller
                 'email.email' => 'Email harus berupa alamat email yang valid.',
                 'password.required' => 'Password diperlukan.',
                 'password.min' => 'Password harus terdiri dari minimal :min karakter.',
+                'password.different' => 'Password baru harus berbeda dengan password lama.',
                 'confirmPassword.required' => 'Konfirmasi password diperlukan.',
                 'confirmPassword.same' => 'Konfirmasi password harus sama dengan password.',
             ]);

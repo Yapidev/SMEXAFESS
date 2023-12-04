@@ -60,11 +60,13 @@ class authController extends Controller
     {
 
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|string|max:30',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
         ], [
-            'name.required' => 'Nama harus diisi.',
+            'name.required' => 'Username harus diisi.',
+            'name.string' => 'Username harus bertipe string.',
+            'name.max' => 'Username max 50 karakter.',
             'email.required' => 'Email harus diisi.',
             'email.email' => 'Email harus berupa alamat email yang valid.',
             'email.unique' => 'Email sudah digunakan.',
@@ -98,7 +100,7 @@ class authController extends Controller
     protected function handleGoogleCallback()
     {
         try {
-            $user = Socialite::driver('google')->user();
+            $user = Socialite::driver('google')->stateless()->user();
             $existingAccount = User::where('email', $user->email)->first();
 
             if ($existingAccount) {

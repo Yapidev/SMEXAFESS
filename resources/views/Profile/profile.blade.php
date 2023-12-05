@@ -99,25 +99,14 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-4">
-                                                    <label for="exampleInputPassword1" class="form-label fw-semibold">(Alias
-                                                        Input)</label>
+                                                    <label for="exampleInputPassword1" class="form-label fw-semibold">Nickname</label>
                                                     <input type="text" class="form-control complex-colorpicker"
                                                         id="exampleInputtext" placeholder="Isi Nickname">
                                                 </div>
                                                 <div class="mb-4">
-                                                    <label for="exampleInputPassword1"
-                                                        class="form-label fw-semibold">Tanggal Lahir</label>
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control"
-                                                            id="kontol" placeholder="mm/dd/yyyy" />
-
-                                                        <span class="input-group-text">
-                                                            <i class="ti ti-calendar fs-5"></i>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-4">
-                                                    <input type="text" id="date-input">
+                                                    <label for="exampleInputPassword1" class="form-label fw-semibold">Tanggal Lahir</label>
+                                                    <input type="text" class="form-control complex-colorpicker"
+                                                        id="date-input" placeholder="YYYY/MM/DD" value="{{Auth::user()->tanggal_lahir ?: ''}}">
                                                 </div>
                                             </div>
 
@@ -143,10 +132,11 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.6/dist/flatpickr.min.js"></script>
 
     <script>
-        flatpickr("#kontol", {
-            dateFormat: "d F Y",
+        flatpickr("#date-input", {
+            dateFormat: "y-m-d",
             altInput: true,
-            altFormat: "j F Y",
+            altFormat: "y-m-d",
+            maxDate: "10-10-2010",
         });
     </script>
 @endsection

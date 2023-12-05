@@ -104,8 +104,10 @@ class authController extends Controller
             $existingAccount = User::where('email', $user->email)->first();
 
             if ($existingAccount) {
+                // dd('halo');
                 Auth::login($existingAccount);
             } else {
+                // dd('hai');
                 $pass = Str::random(16);
                 $data = [
                     'name' => $user->name,
@@ -120,7 +122,7 @@ class authController extends Controller
                 Auth::loginUsingId($newUser);
             }
 
-            return redirect()->route('user.home');
+            return redirect()->route('user.home')->with('success', 'Berhasil login!');
         } catch (\Exception $e) {
             return redirect('login')->with('error', 'Gagal login menggunakan Google');
         }

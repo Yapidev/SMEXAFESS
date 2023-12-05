@@ -9,6 +9,7 @@ class ProfileController extends Controller
 {
     protected function profilePage() {
         $user = Auth::user();
+        // dd($user);
         return response()->view('Profile.profile', compact('user'));
     }
 }

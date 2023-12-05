@@ -17,4 +17,9 @@ class userController extends Controller
     protected function reportListPage() {
         return response()->view('User.report-list');
     }
+
+    protected function detailPost()
+    {
+        return view('user.detailPost');
+    }
 }

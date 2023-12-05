@@ -49,6 +49,7 @@ Route::prefix('user')->middleware('auth', 'user')->controller(userController::cl
     Route::get('home', 'homePage')->name('user.home');
     Route::get('statistic-post', 'statisticPostPage')->name('user.post-feed');
     Route::get('report-list', 'reportListPage')->name('user.report-list');
+    Route::get('detail-post', 'detailPost')->name('user.detail-post');
 
     // Return process
 });

@@ -5,7 +5,7 @@
     <div class="col-lg-4">
       <div class="card rounded-2 overflow-hidden hover-img">
         <div class="position-relative">
-          <a href="javascript:void(0)"><img src="../../dist/images/poto.png" class="card-img-top rounded-0" style="" alt="..."></a>
+          <a href="{{ route('user.detail-post') }}"><img src="../../dist/images/poto.png" class="card-img-top rounded-0" style="" alt="..."></a>
           <span class="badge bg-white text-dark fs-2 rounded-4 lh-sm mb-9 me-9 py-1 px-2 fw-semibold position-absolute bottom-0 end-0">2 Menit Lalu</span>
         </div>
         <div class="card-body p-4">

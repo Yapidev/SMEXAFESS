@@ -23,7 +23,7 @@ class RedirectIfAuthenticated
             if (Auth::check()) {
                 return back();
             } else if (Auth::guard($guard)->check()) {
-                return Auth::user()->role == 'user' ? redirect()->intended(route('dashboard.user')) : redirect()->intended(route('dashboard.admin'));
+                return Auth::user()->role == 'user' ? redirect()->intended(route('user.home')) : redirect()->intended(route('admin.home'));
             }
         }
 

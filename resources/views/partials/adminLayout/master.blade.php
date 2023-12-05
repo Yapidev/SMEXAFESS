@@ -23,6 +23,7 @@
 
     <!-- Core Css -->
     <link id="themeColors" rel="stylesheet" href="../../dist/css/style.min.css" />
+    @yield('link')
 </head>
 
 <body>
@@ -58,8 +59,8 @@
                 <nav class="sidebar-nav scroll-sidebar" data-simplebar>
                     <ul id="sidebarnav">
                         <li class="sidebar-item">
-                            <a class="sidebar-link @if (request()->routeIs('admin.dashboard')) active @endif"
-                                href="{{ route('admin.dashboard') }}" aria-expanded="false">
+                            <a class="sidebar-link @if (request()->routeIs('admin.home')) active @endif"
+                                href="{{ route('admin.home') }}" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-home"></i>
                                 </span>
@@ -487,6 +488,24 @@
     <script src="../../dist/libs/owl.carousel/dist/owl.carousel.min.js"></script>
     <script src="../../dist/libs/apexcharts/dist/apexcharts.min.js"></script>
     <script src="../../dist/js/dashboard.js"></script>
+    <script src="{{ asset('dist/js/plugins/toastr-init.js') }}"></script>
+
+    {{-- Toast Notification --}}
+    <script>
+        toastr.options = {
+            "positionClass": "toast-top-center",
+            "fadeIn": 300,
+            "fadeOut": 1000,
+            "timeOut": 3000,
+        };
+        @if (session()->has('error'))
+            toastr.error('{{ session('error') }}');
+        @elseif (session()->has('success'))
+            toastr.success('{{ session('success') }}');
+        @endif
+    </script>
+
+    @yield('script')
 </body>
 
 <!-- Mirrored from demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/html/main/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 06 Jul 2023 01:55:21 GMT -->

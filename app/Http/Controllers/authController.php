@@ -38,9 +38,9 @@ class authController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             if ($user->role === 'admin') {
-                return redirect()->route('dashboardAdmin')->with('success', 'Anda berhasil login');
+                return redirect()->route('admin.home')->with('success', 'Anda berhasil login');
             } elseif ($user->role === 'user') {
-                return redirect()->route('dashboardUser')->with('success', 'Anda berhasil login');
+                return redirect()->route('user.home')->with('success', 'Anda berhasil login');
             }
         } else if (!$user) {
             return redirect()->back()->withErrors(['email' => 'Akun anda tidak di temukan'])->withInput();
@@ -83,7 +83,7 @@ class authController extends Controller
 
         User::create($user);
 
-        return redirect()->route('login')->with('succsess', 'Anda berhasil register');
+        return redirect()->route('login')->with('success', 'Anda berhasil register');
     }
 
     protected function forgotPasswordPage()
@@ -120,7 +120,7 @@ class authController extends Controller
                 Auth::loginUsingId($newUser);
             }
 
-            return redirect()->route('dashboardUser');
+            return redirect()->route('user.home');
         } catch (\Exception $e) {
             return redirect('login')->with('error', 'Gagal login menggunakan Google');
         }
@@ -130,7 +130,7 @@ class authController extends Controller
     {
         try {
             Auth::logout();
-            return redirect()->route('login');
+            return redirect()->route('login')->woth('success', 'Berhasil logout!');
         } catch (\Throwable $th) {
             return back();
         }

@@ -46,7 +46,7 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('user')->middleware('auth', 'user')->controller(userController::class)->group(function () {
     // Return view
-    Route::get('dashboard', 'dashboardPage')->name('user.dashboard');
+    Route::get('home', 'homePage')->name('user.home');
     Route::get('statistic-post', 'statisticPostPage')->name('user.post-feed');
     Route::get('report-list', 'reportListPage')->name('user.report-list');
 
@@ -56,7 +56,7 @@ Route::prefix('user')->middleware('auth', 'user')->controller(userController::cl
 // Route Admin
 Route::prefix('admin')->middleware('auth', 'admin')->controller(adminController::class)->group(function () {
     // Return view
-    Route::get('dashboard', 'dashboardPage')->name('admin.dashboard');
+    Route::get('home', 'homePage')->name('admin.home');
     Route::get('post-feed', 'postFeedPage')->name('admin.post-feed');
     Route::get('report-list', 'reportListPage')->name('admin.report-list');
 

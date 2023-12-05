@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class userController extends Controller
 {
-    protected function dashboardPage() {
+    protected function homePage() {
         return response()->view('User.dashboardUser');
     }
 

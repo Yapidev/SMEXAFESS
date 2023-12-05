@@ -120,9 +120,25 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
+
+    <script src="{{ asset('dist/js/plugins/toastr-init.js') }}"></script>
+
+    {{-- Toast Notification --}}
+    <script>
+        toastr.options = {
+            "positionClass": "toast-top-center",
+            "fadeIn": 300,
+            "fadeOut": 1000,
+            "timeOut": 3000,
+        };
+        @if (session()->has('error'))
+            toastr.error('{{ session('error') }}');
+        @elseif (session()->has('success'))
+            toastr.success('{{ session('success') }}');
+        @endif
+    </script>
 
     <!--  Import Js Files -->
     <script src="../../dist/libs/jquery/dist/jquery.min.js"></script>

@@ -23,6 +23,12 @@
 
     <!-- Core Css -->
     <link id="themeColors" rel="stylesheet" href="../../dist/css/style.min.css" />
+
+    <style>
+        #toast-container {
+            top: 15px;
+        }
+    </style>
 </head>
 
 <body>
@@ -58,8 +64,8 @@
                 <nav class="sidebar-nav scroll-sidebar" data-simplebar>
                     <ul id="sidebarnav">
                         <li class="sidebar-item">
-                            <a class="sidebar-link @if (request()->routeIs('user.dashboard')) active @endif"
-                                href="{{ route('user.dashboard') }}" aria-expanded="false">
+                            <a class="sidebar-link @if (request()->routeIs('user.home')) active @endif"
+                                href="{{ route('user.home') }}" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-home"></i>
                                 </span>
@@ -67,7 +73,8 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link @if (request()->routeIs('user.post-feed')) active @endif" href="{{route('user.post-feed')}}" aria-expanded="false">
+                            <a class="sidebar-link @if (request()->routeIs('user.post-feed')) active @endif"
+                                href="{{ route('user.post-feed') }}" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-send"></i>
                                 </span>
@@ -75,7 +82,8 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link @if (request()->routeIs('user.report-list')) active @endif" href="{{route('user.report-list')}}" aria-expanded="false">
+                            <a class="sidebar-link @if (request()->routeIs('user.report-list')) active @endif"
+                                href="{{ route('user.report-list') }}" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-report-search"></i>
                                 </span>
@@ -487,6 +495,22 @@
     <script src="../../dist/libs/owl.carousel/dist/owl.carousel.min.js"></script>
     <script src="../../dist/libs/apexcharts/dist/apexcharts.min.js"></script>
     <script src="../../dist/js/dashboard.js"></script>
+    <script src="{{ asset('dist/js/plugins/toastr-init.js') }}"></script>
+
+    {{-- Toast Notification --}}
+    <script>
+        toastr.options = {
+            "positionClass": "toast-top-center",
+            "fadeIn": 300,
+            "fadeOut": 1000,
+            "timeOut": 3000,
+        };
+        @if (session()->has('error'))
+            toastr.error('{{ session('error') }}');
+        @elseif (session()->has('success'))
+            toastr.success('{{ session('success') }}');
+        @endif
+    </script>
 </body>
 
 <!-- Mirrored from demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/html/main/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 06 Jul 2023 01:55:21 GMT -->

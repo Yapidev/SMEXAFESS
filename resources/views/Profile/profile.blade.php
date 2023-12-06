@@ -38,15 +38,26 @@
                                 <div class="card-body p-4">
                                     <h5 class="card-title fw-semibold">Change Profile</h5>
                                     <p class="card-subtitle mb-4">Change your profile picture from here</p>
-                                    <div class="text-center">
-                                        <img src="../../dist/images/profile/user-1.jpg" alt=""
-                                            class="img-fluid rounded-circle" width="120" height="120">
-                                        <div class="d-flex align-items-center justify-content-center my-4 gap-3">
-                                            <button class="btn btn-primary">Upload</button>
-                                            <button class="btn btn-outline-danger">Reset</button>
+                                    <form id="upload-photo" action="{{ route('profile.update-photo') }}"
+                                        enctype="multipart/form-data" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <div class="text-center">
+                                            <img id="profile-image"
+                                                src="{{ asset($user->avatar ? 'storage/' . $user->avatar : 'dist/images/profile/user-1.jpg') }}"
+                                                alt="" class="rounded-circle cursor-pointer" width="120"
+                                                height="120" style="object-fit: cover">
+                                            <input id="photo-profile" type="file" src="" alt=""
+                                                name="photoProfile" class="d-none">
+                                            <div class="d-flex align-items-center justify-content-center my-4 gap-3">
+                                                <button id="upload-button" type="button"
+                                                    class="btn btn-primary">Upload</button>
+                                                <button type="button" id="reset-image"
+                                                    class="btn btn-outline-danger">Reset</button>
+                                            </div>
+                                            <p class="mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
                                         </div>
-                                        <p class="mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -55,21 +66,31 @@
                                 <div class="card-body p-4">
                                     <h5 class="card-title fw-semibold">Change Password</h5>
                                     <p class="card-subtitle mb-4">To change your password please confirm here</p>
-                                    <form>
+                                    <form action="{{ route('profile.update-password') }}" method="POST"
+                                        id="change-password-form">
+                                        @csrf
+                                        @method('PATCH')
                                         <div class="mb-4">
                                             <label for="exampleInputPassword1" class="form-label fw-semibold">Current
                                                 Password</label>
-                                            <input type="password" class="form-control" id="pass-saat-ini" value="">
+                                            <input type="password" class="form-control" id="current-pass" name="currentPass"
+                                                value="">
                                         </div>
                                         <div class="mb-4">
                                             <label for="exampleInputPassword1" class="form-label fw-semibold">New
                                                 Password</label>
-                                            <input type="password" class="form-control" id="pass-baru" value="">
+                                            <input type="password" class="form-control" id="new-pass" name="newPass"
+                                                value="">
                                         </div>
                                         <div class="">
                                             <label for="exampleInputPassword1" class="form-label fw-semibold">Confirm
                                                 Password</label>
-                                            <input type="password" class="form-control" id="konfirmasi-pass" value="">
+                                            <input type="password" class="form-control" id="confirm-pass"
+                                                name="newPass_confirmation" value="">
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-end mt-4 gap-3">
+                                            <button id="update-pass-button" type="submit"
+                                                class="btn btn-primary">Save</button>
                                         </div>
                                     </form>
                                 </div>
@@ -99,14 +120,17 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-4">
-                                                    <label for="exampleInputPassword1" class="form-label fw-semibold">Nickname</label>
+                                                    <label for="exampleInputPassword1"
+                                                        class="form-label fw-semibold">Nickname</label>
                                                     <input type="text" class="form-control complex-colorpicker"
                                                         id="exampleInputtext" placeholder="Isi Nickname">
                                                 </div>
                                                 <div class="mb-4">
-                                                    <label for="exampleInputPassword1" class="form-label fw-semibold">Tanggal Lahir</label>
+                                                    <label for="exampleInputPassword1"
+                                                        class="form-label fw-semibold">Tanggal Lahir</label>
                                                     <input type="text" class="form-control complex-colorpicker"
-                                                        id="date-input" placeholder="YYYY/MM/DD" value="{{Auth::user()->tanggal_lahir ?: ''}}">
+                                                        id="date-input" placeholder="YYYY/MM/DD"
+                                                        value="{{ Auth::user()->tanggal_lahir ?: '' }}">
                                                 </div>
                                             </div>
 
@@ -137,6 +161,121 @@
             altInput: true,
             altFormat: "y-m-d",
             maxDate: "10-10-2010",
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('#profile-image').on('click', function() {
+                var inputFile = $('#photo-profile');
+
+                inputFile.on('change', function(e) {
+                    var file = e.target.files[0];
+                    var reader = new FileReader();
+
+                    reader.onload = function(event) {
+                        $('#profile-image').attr('src', event.target.result);
+                    };
+
+                    reader.readAsDataURL(file);
+                });
+
+                inputFile.click();
+            });
+
+            // Ajax update photo
+            $('#upload-button').on('click', function() {
+                var formData = new FormData($('#upload-photo')[0]);
+                $('.preloader').show();
+
+                $.ajax({
+                    type: 'POST',
+                    url: $('#upload-photo').attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.success) {
+                            $('.preloader').hide();
+                            toastr.success(response.success);
+                        } else {
+                            $('.preloader').hide();
+                            toastr.error(response.error);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $('.preloader').hide();
+                        var errorMessage = 'Terjadi kesalahan dalam permintaan';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        toastr.error(errorMessage);
+                    }
+                });
+            });
+
+            //Ajax update password
+            $('#change-password-form').on('submit', function(e) {
+                e.preventDefault();
+
+                var currentPass = $('#current-pass').val();
+                var newPassword = $('#new-pass').val();
+                var confirmPassword = $('#confirm-pass').val();
+
+                if (!currentPass) {
+                    toastr.error('Kata sandi saat ini harus diisi');
+                    return;
+                } else if (!newPassword) {
+                    toastr.error('Kata sandi baru harus diisi');
+                    return;
+                } else if (!confirmPassword) {
+                    toastr.error('Konfirmasi sandi harus diisi');
+                    return;
+                } else if (newPassword !== confirmPassword) {
+                    toastr.error('Kata sandi baru dan konfirmasi tidak cocok');
+                    return;
+                }
+
+                var form = $('#change-password-form')[0];
+                var formData = new FormData(form);
+
+                $('.preloader').show();
+
+                $.ajax({
+                    type: 'POST',
+                    url: $('#change-password-form').attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.success) {
+                            $('.preloader').hide();
+                            toastr.success(response.success);
+                            $('#current-pass').val('');
+                            $('#new-pass').val('');
+                            $('#confirm-pass').val('');
+                        } else {
+                            $('.preloader').hide();
+                            toastr.error(response.error);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $('.preloader').hide();
+                        var errorMessage = 'Terjadi kesalahan dalam permintaan';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        toastr.error(errorMessage);
+                    }
+                });
+            });
+
+            var originalImageSrc = $('#profile-image').attr('src');
+
+            $('#reset-image').on('click', function() {
+                $('#profile-image').attr('src', originalImageSrc);
+            });
+
         });
     </script>
 @endsection

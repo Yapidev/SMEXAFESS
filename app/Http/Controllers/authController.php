@@ -104,10 +104,8 @@ class authController extends Controller
             $existingAccount = User::where('email', $user->email)->first();
 
             if ($existingAccount) {
-                // dd('halo');
                 Auth::login($existingAccount);
             } else {
-                // dd('hai');
                 $pass = Str::random(16);
                 $data = [
                     'name' => $user->name,

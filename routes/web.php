@@ -39,8 +39,11 @@ Route::middleware('guest')->controller(authController::class)->group(function ()
 });
 
 // Only middleware auth
-Route::middleware('auth')->group(function () {
-    Route::get('profile', [ProfileController::class, 'profilePage'])->name('profilePage');
+Route::middleware('auth')->controller(ProfileController::class)->group(function () {
+    Route::get('profile', 'profilePage')->name('profile.index');
+    Route::patch('update-photo', 'updatePhotoProfileProcess')->name('profile.update-photo');
+    Route::patch('update-password', 'updatePassword')->name('profile.update-password');
+    Route::patch('update-biodata', 'updateBiodata')->name('profile.update-biodata');
     Route::post('logout', [authController::class, 'logout'])->name('logoutProcess');
 });
 

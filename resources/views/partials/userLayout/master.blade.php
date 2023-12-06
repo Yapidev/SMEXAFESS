@@ -39,11 +39,6 @@
         <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/favicon.ico"
             alt="loader" class="lds-ripple img-fluid" />
     </div>
-    <!-- Preloader -->
-    <div class="preloader">
-        <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/favicon.ico"
-            alt="loader" class="lds-ripple img-fluid" />
-    </div>
     <!--  Body Wrapper -->
     <div class="page-wrapper" id="main-wrapper" data-theme="blue_theme" data-layout="vertical" data-sidebartype="full"
         data-sidebar-position="fixed" data-header-position="fixed">
@@ -267,7 +262,7 @@
                                                 </div>
                                             </div>
                                             <div class="message-body">
-                                                <a href="{{ route('profilePage') }}"
+                                                <a href="{{ route('profile.index') }}"
                                                     class="py-8 px-7 mt-8 d-flex align-items-center">
                                                     <span
                                                         class="d-flex align-items-center justify-content-center bg-light rounded-1 p-6">

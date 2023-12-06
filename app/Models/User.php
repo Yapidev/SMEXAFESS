@@ -23,7 +23,8 @@ class User extends Authenticatable
         'password',
         'avatar',
         'tanggal_lahir',
-        'role'
+        'role',
+        'nickname',
     ];
 
     /**

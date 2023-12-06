@@ -44,7 +44,8 @@ Route::middleware('auth')->controller(ProfileController::class)->group(function 
     Route::get('profile', 'profilePage')->name('profile.index');
     Route::patch('update-photo', 'updatePhotoProfileProcess')->name('profile.update-photo');
     Route::patch('update-password', 'updatePassword')->name('profile.update-password');
-    Route::patch('update-biodata', 'updateBiodata')->name('profile.update-biodata');
+    Route::put('update-biodata', 'updateBiodata')->name('profile.update-biodata');
+    Route::delete('delete-photo', 'deletePhoto')->name('profile.delete-photo');
     Route::post('logout', [authController::class, 'logout'])->name('logoutProcess');
 });
 

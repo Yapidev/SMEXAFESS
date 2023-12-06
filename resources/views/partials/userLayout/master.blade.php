@@ -16,6 +16,7 @@
     <meta name="author" content="" />
     <meta name="keywords" content="Mordenize" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!--  Favicon -->
     <link rel="shortcut icon" type="image/png"
         href="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/favicon.ico" />
@@ -109,10 +110,8 @@
                         </li>
                     </ul>
                     <div class="d-block d-lg-none">
-                        <img src="../../dist/images/logo2.png"
-                            class="dark-logo" width="180" alt="" />
-                        <img src="../../dist/images/darklogo.png"
-                            class="light-logo" width="180" alt="" />
+                        <img src="../../dist/images/logo2.png" class="dark-logo" width="180" alt="" />
+                        <img src="../../dist/images/darklogo.png" class="light-logo" width="180" alt="" />
                     </div>
                     <button class="navbar-toggler p-0 border-0" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
@@ -234,8 +233,8 @@
                                         data-bs-toggle="dropdown" aria-expanded="false">
                                         <div class="d-flex align-items-center">
                                             <div class="user-profile-img">
-                                                <img src="../../dist/images/profile/user-1.jpg" class="rounded-circle"
-                                                    width="35" height="35" alt="" />
+                                                <img src="{{ asset(Auth::user()->avatar ? 'storage/' . Auth::user()->avatar : 'dist/images/profile/user-1.jpg') }}" class="rounded-circle"
+                                                    width="35" height="35" alt="" style="object-fit: cover" id="photo-profile-nav"/>
                                             </div>
                                         </div>
                                     </a>
@@ -246,10 +245,10 @@
                                                 <h5 class="mb-0 fs-5 fw-semibold">User Profile</h5>
                                             </div>
                                             <div class="d-flex align-items-center py-9 mx-7 border-bottom">
-                                                <img src="../../dist/images/profile/user-1.jpg" class="rounded-circle"
-                                                    width="80" height="80" alt="" />
+                                                <img src="{{ asset(Auth::user()->avatar ? 'storage/' . Auth::user()->avatar : 'dist/images/profile/user-1.jpg') }}"
+                                                    width="80" height="80" alt="" id="photo-profile-master" style="object-fit: cover" class="rounded-circle"/>
                                                 <div class="ms-3">
-                                                    <h5 class="mb-1 fs-3">{{ Auth::user()->name }}</h5>
+                                                    <h5 class="mb-1 fs-3" id="nama-user-nav">{{ Auth::user()->name }}</h5>
                                                     <span class="mb-1 d-block text-dark">
                                                         @if (Auth::user()->role == 'admin')
                                                             Admin
@@ -257,7 +256,7 @@
                                                             User
                                                         @endif
                                                     </span>
-                                                    <p class="mb-0 d-flex text-dark align-items-center gap-2">
+                                                    <p class="mb-0 d-flex text-dark align-items-center gap-2" id="email-user-nav">
                                                         <i class="ti ti-mail fs-4"></i> {{ Auth::user()->email }}
                                                     </p>
                                                 </div>
@@ -508,6 +507,12 @@
         @elseif (session()->has('success'))
             toastr.success('{{ session('success') }}');
         @endif
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
     </script>
 
     @yield('script')

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->enum('role', ['user', 'admin']);
             $table->string('avatar')->nullable();
             $table->date('tanggal_lahir')->nullable();
+            $table->string('nickname')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -2,6 +2,7 @@
 
 @section('link')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.6/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="{{ asset('dist/libs/sweetalert2/dist/sweetalert2.min.css') }}">
 @endsection
 
 @section('content')
@@ -48,12 +49,12 @@
                                                 alt="" class="rounded-circle cursor-pointer" width="120"
                                                 height="120" style="object-fit: cover">
                                             <input id="photo-profile" type="file" src="" alt=""
-                                                name="photoProfile" class="d-none">
+                                                name="photoProfile" class="d-none" id="photo-profile-main">
                                             <div class="d-flex align-items-center justify-content-center my-4 gap-3">
                                                 <button id="upload-button" type="button"
                                                     class="btn btn-primary">Upload</button>
-                                                <button type="button" id="reset-image"
-                                                    class="btn btn-outline-danger">Reset</button>
+                                                <button type="button" id="delete-photo" class="btn btn-outline-danger"
+                                                    data-url="{{ route('profile.delete-photo') }}">Delete</button>
                                             </div>
                                             <p class="mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
                                         </div>
@@ -102,20 +103,25 @@
                                     <h5 class="card-title fw-semibold">Personal Details</h5>
                                     <p class="card-subtitle mb-4">To change your personal detail , edit and save from here
                                     </p>
-                                    <form>
+                                    <form action="{{ route('profile.update-biodata') }}" method="POST"
+                                        id="biodata-update-form">
+                                        @csrf
+                                        @method('PUT')
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <div class="mb-4">
                                                     <label for="exampleInputPassword1"
                                                         class="form-label fw-semibold">Nama</label>
                                                     <input type="text" class="form-control" id="username-input"
-                                                        placeholder="Isi nama anda" value="{{ $user->name }}">
+                                                        placeholder="Isi nama anda" value="{{ $user->name }}"
+                                                        name="username">
                                                 </div>
                                                 <div class="mb-4">
                                                     <label for="exampleInputPassword1"
                                                         class="form-label fw-semibold">Email</label>
                                                     <input type="email" class="form-control" id="email-input"
-                                                        placeholder="Masukkan email anda" value="{{ $user->email }}">
+                                                        placeholder="Masukkan email anda" value="{{ $user->email }}"
+                                                        name="email">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
@@ -123,21 +129,19 @@
                                                     <label for="exampleInputPassword1"
                                                         class="form-label fw-semibold">Nickname</label>
                                                     <input type="text" class="form-control complex-colorpicker"
-                                                        id="exampleInputtext" placeholder="Isi Nickname">
+                                                        id="nickname-input" placeholder="Isi Nickname" name="nickname"
+                                                        value="{{ $user->nickname }}">
                                                 </div>
                                                 <div class="mb-4">
                                                     <label for="exampleInputPassword1"
                                                         class="form-label fw-semibold">Tanggal Lahir</label>
                                                     <input type="text" class="form-control complex-colorpicker"
-                                                        id="date-input" placeholder="YYYY/MM/DD"
-                                                        value="{{ Auth::user()->tanggal_lahir ?: '' }}">
+                                                        id="date-input" placeholder="YYYY/MM/DD" name="date">
                                                 </div>
                                             </div>
-
                                             <div class="col-12">
                                                 <div class="d-flex align-items-center justify-content-end mt-4 gap-3">
-                                                    <button class="btn btn-primary">Save</button>
-                                                    <button class="btn btn-light-danger text-danger">Cancel</button>
+                                                    <button class="btn btn-primary" type="submit">Save</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -154,13 +158,15 @@
 
 @section('script')
     <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.6/dist/flatpickr.min.js"></script>
+    <script src="{{ asset('dist/libs/sweetalert2/dist/sweetalert2.min.js') }}"></script>
 
     <script>
         flatpickr("#date-input", {
-            dateFormat: "y-m-d",
+            dateFormat: "Y-m-d",
             altInput: true,
-            altFormat: "y-m-d",
+            altFormat: "Y-m-d",
             maxDate: "10-10-2010",
+            defaultDate: "{{ $user->tanggal_lahir }}"
         });
     </script>
 
@@ -196,6 +202,13 @@
                     contentType: false,
                     success: function(response) {
                         if (response.success) {
+                            $('#photo-profile-master').attr('src', "{{ asset('storage') }}" +
+                                "/" +
+                                response.avatar);
+                            $('#photo-profile-nav').attr('src', "{{ asset('storage') }}" +
+                                "/" +
+                                response.avatar);
+                            $('#photo-profile').val('');
                             $('.preloader').hide();
                             toastr.success(response.success);
                         } else {
@@ -270,12 +283,101 @@
                 });
             });
 
-            var originalImageSrc = $('#profile-image').attr('src');
+            // Ajax delete photo
+            $('#delete-photo').on('click', function() {
+                var url = $(this).data('url');
+                Swal.fire({
+                    title: 'Konfirmasi',
+                    text: 'Apakah Anda yakin ingin menghapus foto ini?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: "Hapus",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('.preloader').show();
 
-            $('#reset-image').on('click', function() {
-                $('#profile-image').attr('src', originalImageSrc);
+                        $.ajax({
+                            type: 'DELETE',
+                            url: url,
+                            processData: false,
+                            contentType: false,
+                            success: function(response) {
+                                if (response.success) {
+                                    $('#profile-image').attr('src',
+                                        'dist/images/profile/user-1.jpg');
+                                    $('#photo-profile-master').attr('src',
+                                        'dist/images/profile/user-1.jpg');
+                                    $('#photo-profile-nav').attr('src',
+                                        'dist/images/profile/user-1.jpg');
+                                    $('.preloader').hide();
+                                    toastr.success(response.success);
+                                } else if (response.warning) {
+                                    $('.preloader').hide();
+                                    toastr.warning(response.warning);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                $('.preloader').hide();
+                                var errorMessage = 'Terjadi kesalahan dalam permintaan';
+                                if (xhr.responseJSON && xhr.responseJSON.message) {
+                                    errorMessage = xhr.responseJSON.message;
+                                }
+                                toastr.error(errorMessage);
+                            }
+                        })
+                    }
+                });
             });
 
+            // Ajax update biodata
+            $('#biodata-update-form').on('submit', function(e) {
+                e.preventDefault();
+
+                var nama = $('#username-input').val();
+                var nickname = $('#nickname').val();
+
+                if (nama.length > 30) {
+                    toastr.warning('Nama maksimal 30 karakter');
+                    return;
+                }
+
+                if (nickname.length > 30) {
+                    toastr.warning('Nickname maksimal 30 karakter');
+                    return;
+                }
+
+                var form = $(this);
+                var formData = new FormData(form[0]);
+
+                $('.preloader').show();
+
+                $.ajax({
+                    type: 'POST',
+                    url: $('#biodata-update-form').attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.success) {
+                            $('#nama-user-nav').text(response.user.name);
+                            $('#email-user-nav').text(response.user.email);
+                            $('.preloader').hide();
+                            toastr.success(response.success);
+                        } else {
+                            $('.preloader').hide();
+                            toastr.error(response.error);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $('.preloader').hide();
+                        var errorMessage = 'Terjadi kesalahan dalam permintaan';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        toastr.error(errorMessage);
+                    }
+                });
+            });
         });
     </script>
 @endsection

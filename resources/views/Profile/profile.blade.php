@@ -334,7 +334,7 @@
                 e.preventDefault();
 
                 var nama = $('#username-input').val();
-                var nickname = $('#nickname').val();
+                var nickname = $('#nickname-input').val();
 
                 if (nama.length > 30) {
                     toastr.warning('Nama maksimal 30 karakter');

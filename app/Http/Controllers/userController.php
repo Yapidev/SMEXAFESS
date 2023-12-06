@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use Illuminate\Http\Request;
 
 class userController extends Controller
@@ -20,6 +21,7 @@ class userController extends Controller
 
     protected function detailPost()
     {
-        return view('user.detailPost');
+        $comments = Comment::with('user')->get();
+        return view('user.detailPost', compact('comments'));
     }
 }

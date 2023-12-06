@@ -8,6 +8,7 @@
     <title>Mordenize</title>
     <!--  Required Meta Tag -->
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="handheldfriendly" content="true" />
     <meta name="MobileOptimized" content="width" />
@@ -19,10 +20,10 @@
     <link rel="shortcut icon" type="image/png"
         href="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/favicon.ico" />
     <!-- Owl Carousel  -->
-    <link rel="stylesheet" href="../../dist/libs/owl.carousel/dist/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="{{ asset('dist/libs/owl.carousel/dist/assets/owl.carousel.min.css') }}">
 
     <!-- Core Css -->
-    <link id="themeColors" rel="stylesheet" href="../../dist/css/style.min.css" />
+    <link id="themeColors" rel="stylesheet" href="{{ asset('dist/css/style.min.css') }}" />
 
     <style>
         #toast-container {
@@ -48,9 +49,9 @@
             <div>
                 <div class="brand-logo d-flex align-items-center justify-content-between">
                     <a href="index-2.html" class="text-nowrap logo-img">
-                        <img src="../../dist/images/logo2.png"
+                        <img src="../../dist/images/lightlogo.png"
                             class="dark-logo" width="180" alt="" />
-                        <img src="../../dist/images/logo2.png"
+                        <img src="../../dist/images/lightlogo.png"
                             class="light-logo" width="180" alt="" />
                     </a>
                     <div class="close-btn d-lg-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
@@ -479,19 +480,19 @@
     </div>
 
     <!--  Import Js Files -->
-    <script src="../../dist/libs/jquery/dist/jquery.min.js"></script>
-    <script src="../../dist/libs/simplebar/dist/simplebar.min.js"></script>
-    <script src="../../dist/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('dist/libs/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ asset('dist/libs/simplebar/dist/simplebar.min.js') }}"></script>
+    <script src="{{ asset('dist/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
     <!--  core files -->
-    <script src="../../dist/js/app.min.js"></script>
-    <script src="../../dist/js/app.init.js"></script>
-    <script src="../../dist/js/app-style-switcher.js"></script>
-    <script src="../../dist/js/sidebarmenu.js"></script>
-    <script src="../../dist/js/custom.js"></script>
+    <script src="{{ asset('dist/js/app.min.js') }}"></script>
+    <script src="{{ asset('dist/js/app.init.js') }}"></script>
+    <script src="{{ asset('dist/js/app-style-switcher.js') }}"></script>
+    <script src="{{ asset('dist/js/sidebarmenu.js') }}"></script>
+    <script src="{{ asset('dist/js/custom.js') }}"></script>
     <!--  current page js files -->
-    <script src="../../dist/libs/owl.carousel/dist/owl.carousel.min.js"></script>
-    <script src="../../dist/libs/apexcharts/dist/apexcharts.min.js"></script>
-    <script src="../../dist/js/dashboard.js"></script>
+    <script src="{{ asset('dist/libs/owl.carousel/dist/owl.carousel.min.js') }}"></script>
+    <script src="{{ asset('dist/libs/apexcharts/dist/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('dist/js/dashboard.js') }}"></script>
     <script src="{{ asset('dist/js/plugins/toastr-init.js') }}"></script>
 
     {{-- Toast Notification --}}

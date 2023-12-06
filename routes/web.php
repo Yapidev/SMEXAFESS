@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\adminController;
 use App\Http\Controllers\authController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\userController;
 use Illuminate\Support\Facades\Route;
@@ -53,8 +54,12 @@ Route::prefix('user')->middleware('auth', 'user')->controller(userController::cl
     Route::get('statistic-post', 'statisticPostPage')->name('user.post-feed');
     Route::get('report-list', 'reportListPage')->name('user.report-list');
     Route::get('detail-post', 'detailPost')->name('user.detail-post');
-
+    Route::get('get-comments', [CommentController::class, 'getComments'])->name('comments.get');
+    Route::get('get-active-user-id', [CommentController::class, 'getActiveUserId'])->name('comments.getId');
+    
     // Return process
+    Route::post('comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::delete('comments/{id}', [CommentController::class, 'destroy'])->name('comments.delete');
 });
 
 // Route Admin

@@ -119,56 +119,23 @@
     <div class="card">
         <div class="card-body">
             <h4 class="mb-4 fw-semibold">Post Comments</h4>
-            <form>
-                <textarea class="form-control mb-4" rows="5"></textarea>
-                <button class="btn btn-primary">Post Comment</button>
+            <form id="comment-form">
+                <textarea id="comment-content" class="form-control mb-4" rows="5"></textarea>
+                <button class="btn btn-primary">Kirim Komentar</button>
             </form>
             <div class="d-flex align-items-center gap-3 mb-4 mt-7 pt-8">
                 <h4 class="mb-0 fw-semibold">Comments</h4>
-                <span class="badge bg-light-primary text-primary fs-4 fw-semibold px-6 py-8 rounded">3</span>
+                <span id="comment-count"
+                    class="badge bg-light-primary text-primary fs-4 fw-semibold px-6 py-8 rounded">0</span>
             </div>
             <div class="position-relative">
-                <div class="p-4 rounded-2 bg-light mb-3">
+                @foreach ($comments as $comment)
+                    <div id="comments-container"></div>
+                @endforeach
+                {{-- <div class="p-4 rounded-2 bg-light mb-3 ms-7">
                     <div class="d-flex align-items-center gap-3">
-                        <img src="../../dist/images/profile/user-2.jpg" alt="" class="rounded-circle" width="33"
-                            height="33">
-                        <h6 class="fw-semibold mb-0 fs-4">Don Russell</h6>
-                        <span class="p-1 bg-light-dark rounded-circle d-inline-block"></span>
-                    </div>
-                    <p class="my-3">Es do ujurus nejson imju azgudpi toceztep ji cocicoci bosawrop korze ta.
-                        Casetlu udumej umocu wanaro webmos ijafa ud muli amja softoj ma pijum.
-                    </p>
-                    <div class="d-flex align-items-center gap-2">
-                        <a class="text-white d-flex align-items-center justify-content-center bg-secondary p-2 fs-4 rounded-circle"
-                            href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-title="Reply">
-                            <i class="ti ti-arrow-back-up"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="p-4 rounded-2 bg-light mb-3">
-                    <div class="d-flex align-items-center gap-3">
-                        <img src="../../dist/images/profile/user-3.jpg" alt="" class="rounded-circle" width="33"
-                            height="33">
-                        <h6 class="fw-semibold mb-0 fs-4">Cordelia Potter</h6>
-                        <span class="p-1 bg-light-dark rounded-circle d-inline-block"></span>
-                    </div>
-                    <p class="my-3">Huwso jewzehgu julriw niwgazep lewbob isujirmuz hemto pahop cewa zuhucze
-                        rinitba etdebluj.
-                        Obdevo bo fa siztes laobeir agoemugo rut sapaviw mulati do re dabelul wo tumnik wih mu.
-                    </p>
-                    <div class="d-flex align-items-center gap-2">
-                        <a class="text-white d-flex align-items-center justify-content-center bg-secondary p-2 fs-4 rounded-circle"
-                            href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-title="Reply">
-                            <i class="ti ti-arrow-back-up"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="p-4 rounded-2 bg-light mb-3 ms-7">
-                    <div class="d-flex align-items-center gap-3">
-                        <img src="../../dist/images/profile/user-3.jpg" alt="" class="rounded-circle" width="40"
-                            height="40">
+                        <img src="../../dist/images/profile/user-3.jpg" alt="" class="rounded-circle"
+                            width="40" height="40">
                         <h6 class="fw-semibold mb-0 fs-4">Irene Hanson</h6>
                         <span class="p-1 bg-light-dark rounded-circle d-inline-block"></span>
                     </div>
@@ -176,26 +143,7 @@
                         vuj ki teb or.
                         Lohi hafa faddegon horoz ebema kew idful ducam nev rol iga wikkobsu sucdu gud.
                     </p>
-                </div>
-                <div class="p-4 rounded-2 bg-light">
-                    <div class="d-flex align-items-center gap-3">
-                        <img src="../../dist/images/profile/user-4.jpg" alt="" class="rounded-circle"
-                            width="33" height="33">
-                        <h6 class="fw-semibold mb-0 fs-4">Seth Ortiz</h6>
-                        <span class="p-1 bg-light-dark rounded-circle d-inline-block"></span>
-                    </div>
-                    <p class="my-3">Icme rasejmat ciwo ifekemug owoca vicoz ukikitus famiftat nuk eroewu za upe.
-                        Pobrikvup kivofvac tuba ot veh ozoab sa gesi hahoniha hop burbip volo hufotobo di uted
-                        vojoamu.
-                    </p>
-                    <div class="d-flex align-items-center gap-2">
-                        <a class="text-white d-flex align-items-center justify-content-center bg-secondary p-2 fs-4 rounded-circle"
-                            href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-title="Reply">
-                            <i class="ti ti-arrow-back-up"></i>
-                        </a>
-                    </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -223,8 +171,8 @@
                                         type="button" id="add1"> - </button>
                                     <input type="text"
                                         class="form-control round-20 bg-transparent text-muted fs-2 border-0  text-center qty"
-                                        placeholder="" aria-label="Example text with button addon"
-                                        aria-describedby="add1" value="1" />
+                                        placeholder="" aria-label="Example text with button addon" aria-describedby="add1"
+                                        value="1" />
                                     <button class="btn text-success bg-light-success  p-0 round-20 border-0 add"
                                         type="button" id="addo2"> + </button>
                                 </div>
@@ -726,28 +674,8 @@
             </div>
         </div>
     </div>
-    <!-- ---------------------------------------------- -->
-    <!-- Customizer -->
-    <!-- ---------------------------------------------- -->
-    <!-- ---------------------------------------------- -->
-    <!-- Import Js Files -->
-    <!-- ---------------------------------------------- -->
-    <script src="../../dist/libs/jquery/dist/jquery.min.js"></script>
-    <script src="../../dist/libs/simplebar/dist/simplebar.min.js"></script>
-    <script src="../../dist/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- ---------------------------------------------- -->
-    <!-- core files -->
-    <!-- ---------------------------------------------- -->
-    <script src="../../dist/js/app.min.js"></script>
-    <script src="../../dist/js/app.init.js"></script>
-    <script src="../../dist/js/app-style-switcher.js"></script>
-    <script src="../../dist/js/sidebarmenu.js"></script>
 
-    <script src="../../dist/js/custom.js"></script>
-    <!-- ---------------------------------------------- -->
-    <!-- current page js files -->
-    <!-- ---------------------------------------------- -->
-    <script src="../../dist/js/apps/chat.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
     <script>
         let likeCount = 1392;
@@ -779,5 +707,156 @@
             let likeCountElement = document.getElementById('like-count');
             likeCountElement.textContent = likeCount;
         }
+    </script>
+    <script>
+        var assetUrl = "{{ asset('storage/') }}";
+        var activeUserId;
+
+        $(document).ready(function() {
+            $('#comment-form').submit(function(e) {
+                e.preventDefault();
+
+                var commentContent = $('#comment-content').val();
+
+                addNewCommentToView(commentContent);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/user/comments',
+                    data: {
+                        '_token': $('meta[name="csrf-token"]').attr('content'),
+                        'content': commentContent,
+                    },
+                    success: function(data) {
+                        $('#comment-content').val('');
+
+                        getComments();
+                        console.log('data', data.comment);
+                    },
+                    error: function(error) {
+                        console.log('Error:', error);
+                    }
+                });
+            });
+
+            function addNewCommentToView(content) {
+                var commentHtml = `
+            <div class="p-4 rounded-2 bg-light mb-3">
+                <div class="d-flex align-items-center gap-3">
+                    <img src="${assetUrl}/user-placeholder.jpg" alt="" class="rounded-circle" width="33" height="33">
+                    <h6 class="fw-semibold mb-0 fs-4">You</h6>
+                    <span class="p-1 bg-light-dark rounded-circle d-inline-block"></span>
+                </div>
+                <p class="my-3">${content}</p>
+            </div>
+        `;
+                $('#comments-container').prepend(commentHtml);
+            }
+
+            getActiveUserId();
+
+            function getActiveUserId() {
+                $.ajax({
+                    type: 'GET',
+                    url: '/user/get-active-user-id',
+                    success: function(response) {
+                        // Set the activeUserId variable
+                        activeUserId = response.activeUserId;
+                        // After getting the active user ID, call the function to get comments
+                        getComments();
+                    },
+                    error: function(error) {
+                        console.log('Error:', error);
+                    }
+                });
+            }
+
+            function getComments() {
+                $.ajax({
+                    type: 'GET',
+                    url: '/user/get-comments',
+                    cache: false,
+                    success: function(response) {
+                        updateView(response.comments);
+                    },
+                    error: function(error) {
+                        console.log('Error:', error);
+                    }
+                });
+            }
+
+            function updateView(comments) {
+                $('#comments-container').empty();
+
+
+                comments.forEach(function(comment) {
+
+                    var deleteOption = (comment.user.id === activeUserId) ?
+                    `<li>
+                        <a class="dropdown-item delete-comment" href="#" data-comment-id="${comment.id}">
+                            <i class="ti ti-trash text-muted me-1 fs-4"></i>Hapus
+                        </a>
+                    </li>` :
+                        '';
+                    var commentHtml = `
+                <div class="p-4 rounded-2 bg-light mb-3" id="comment-${comment.id}">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="${assetUrl}/${comment.user.avatar}" alt="" class="rounded-circle" width="33" height="33">
+                        <h6 class="fw-semibold mb-0 fs-4">${comment.user.name}</h6>
+                        <div class="ms-auto">
+                          <div class="dropdown">
+                            <a class="" href="javascript:void(0)" id="m1" data-bs-toggle="dropdown" aria-expanded="false">
+                              <i class="ti ti-dots-vertical fs-4"></i>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="m1">
+                                ${deleteOption}
+                              <li>
+                                <a class="dropdown-item" href="#">
+                                  <i class="fas fa-flag text-muted me-1 fs-4"></i>Report </a>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                    </div>
+                    <p class="my-3">${comment.content}</p>
+                </div>
+            `;
+                    $('#comments-container').prepend(commentHtml);
+                });
+
+                setCommentCount(comments.length);
+
+                $('.delete-comment').on('click', function(e) {
+                    e.preventDefault();
+                    var commentId = $(this).data('comment-id');
+                    // Panggil fungsi untuk menghapus komentar
+                    deleteComment(commentId);
+                });
+
+            }
+
+            function deleteComment(commentId) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: `/user/comments/${commentId}`,
+                    data: {
+                        '_token': $('meta[name="csrf-token"]').attr('content'),
+                    },
+                    success: function(response) {
+                        $(`#comment-${commentId}`).remove();
+                        setCommentCount(response.commentCount);
+                    },
+                    error: function(error) {
+                        console.log('Error:', error);
+                    }
+                });
+            }
+
+            function setCommentCount(count) {
+                $('#comment-count').text(count);
+            }
+
+            getComments();
+        });
     </script>
 @endsection

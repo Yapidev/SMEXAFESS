@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class userController extends Controller
 {
     protected function homePage() {
-        return response()->view('User.dashboardUser');
+        $user = Auth::user();
+        return response()->view('User.dashboardUser', compact('user'));
     }
 
     protected function statisticPostPage() {

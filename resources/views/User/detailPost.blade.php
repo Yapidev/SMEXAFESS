@@ -148,6 +148,47 @@
         </div>
     </div>
     </div>
+    <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportModalLabel">Mengapa Anda melaporkan komentar ini?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-check my-2">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                        <label class="form-check-label" for="inlineCheckbox1">Spam Komentar</label>
+                    </div>
+                    <div class="form-check my-2">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                        <label class="form-check-label" for="inlineCheckbox2">Penindasan atau pelecehan</label>
+                    </div>
+                    <div class="form-check my-2">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
+                        <label class="form-check-label" for="inlineCheckbox3">Perkataan atau simbol kebencian</label>
+                    </div>
+                    <div class="form-check my-2">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option4">
+                        <label class="form-check-label" for="inlineCheckbox4">Informasi Palsu</label>
+                    </div>
+                    <div class="form-check my-2">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="option5">
+                        <label class="form-check-label" for="inlineCheckbox5">Aku hanya tidak menyukainya</label>
+                    </div>
+                    <div class="form-check my-2">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox6" value="option6">
+                        <label class="form-check-label" for="inlineCheckbox6">Ketelanjangan atau pornografi</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary">Laporkan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!--  Shopping Cart -->
     <div class="offcanvas offcanvas-end shopping-cart" tabindex="-1" id="offcanvasRight"
         aria-labelledby="offcanvasRightLabel">
@@ -171,8 +212,8 @@
                                         type="button" id="add1"> - </button>
                                     <input type="text"
                                         class="form-control round-20 bg-transparent text-muted fs-2 border-0  text-center qty"
-                                        placeholder="" aria-label="Example text with button addon" aria-describedby="add1"
-                                        value="1" />
+                                        placeholder="" aria-label="Example text with button addon"
+                                        aria-describedby="add1" value="1" />
                                     <button class="btn text-success bg-light-success  p-0 round-20 border-0 add"
                                         type="button" id="addo2"> + </button>
                                 </div>
@@ -517,6 +558,7 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         let likeCount = 1392;
@@ -553,11 +595,25 @@
         var assetUrl = "{{ asset('storage/') }}";
         var activeUserId;
 
+        function showToastError(message) {
+            toastr.error(message);
+        }
+
+        var userCommentCount = parseInt(localStorage.getItem('userCommentCount')) || 0;
+
         $(document).ready(function() {
             $('#comment-form').submit(function(e) {
                 e.preventDefault();
 
-                var commentContent = $('#comment-content').val();
+                if (userCommentCount >= 5) {
+                    showToastError('Anda telah mencapai batas maksimal komentar (5 kali).');
+                    return;
+                }
+                var commentContent = $('#comment-content').val().trim();
+                if (commentContent === '') {
+                    showToastError('Kamu belum mengisi komentar!');
+                    return;
+                }
 
                 addNewCommentToView(commentContent);
 
@@ -572,6 +628,11 @@
                         $('#comment-content').val('');
 
                         getComments();
+
+                        userCommentCount++;
+                        localStorage.setItem('userCommentCount', userCommentCount.toString());
+
+                        toastr.success('Komentar berhasil dikirim');
                         console.log('data', data.comment);
                     },
                     error: function(error) {
@@ -582,15 +643,14 @@
 
             function addNewCommentToView(content) {
                 var commentHtml = `
-            <div class="p-4 rounded-2 bg-light mb-3">
-                <div class="d-flex align-items-center gap-3">
-                    <img src="${assetUrl}/user-placeholder.jpg" alt="" class="rounded-circle" width="33" height="33">
-                    <h6 class="fw-semibold mb-0 fs-4">You</h6>
-                    <span class="p-1 bg-light-dark rounded-circle d-inline-block"></span>
-                </div>
-                <p class="my-3">${content}</p>
-            </div>
-        `;
+                    <div class="p-4 rounded-2 bg-light mb-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <img src="${assetUrl}/user-placeholder.jpg" alt="" class="rounded-circle" width="33" height="33">
+                            <h6 class="fw-semibold mb-0 fs-4">You</h6>
+                        </div>
+                        <p class="my-3">${content}</p>
+                    </div>
+                `;
                 $('#comments-container').prepend(commentHtml);
             }
 
@@ -601,9 +661,7 @@
                     type: 'GET',
                     url: '/user/get-active-user-id',
                     success: function(response) {
-                        // Set the activeUserId variable
                         activeUserId = response.activeUserId;
-                        // After getting the active user ID, call the function to get comments
                         getComments();
                     },
                     error: function(error) {
@@ -633,12 +691,20 @@
                 comments.forEach(function(comment) {
 
                     var deleteOption = (comment.user.id === activeUserId) ?
-                    `<li>
+                        `<li>
                         <a class="dropdown-item delete-comment" href="#" data-comment-id="${comment.id}">
                             <i class="ti ti-trash text-muted me-1 fs-4"></i>Hapus
                         </a>
                     </li>` :
                         '';
+
+                    var reportOption = `
+                    <li>
+                        <a class="dropdown-item report-comment" href="#" data-comment-id="${comment.id}">
+                            <i class="fas fa-flag text-muted me-1 fs-4"></i>Report
+                        </a>
+                    </li>`;
+
                     var commentHtml = `
                 <div class="p-4 rounded-2 bg-light mb-3" id="comment-${comment.id}">
                     <div class="d-flex align-items-center gap-3">
@@ -651,10 +717,7 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="m1">
                                 ${deleteOption}
-                              <li>
-                                <a class="dropdown-item" href="#">
-                                  <i class="fas fa-flag text-muted me-1 fs-4"></i>Report </a>
-                              </li>
+                                ${reportOption}
                             </ul>
                           </div>
                         </div>
@@ -665,12 +728,18 @@
                     $('#comments-container').prepend(commentHtml);
                 });
 
+                $('.report-comment').on('click', function(e) {
+                    e.preventDefault();
+                    var commentId = $(this).data('comment-id');
+                    $('#reportModal').modal('show');
+                    $('#reportModal').data('comment-id', commentId);
+                });
+
                 setCommentCount(comments.length);
 
                 $('.delete-comment').on('click', function(e) {
                     e.preventDefault();
                     var commentId = $(this).data('comment-id');
-                    // Panggil fungsi untuk menghapus komentar
                     deleteComment(commentId);
                 });
 
@@ -686,6 +755,7 @@
                     success: function(response) {
                         $(`#comment-${commentId}`).remove();
                         setCommentCount(response.commentCount);
+                        toastr.success('Komentar berhasil dihapus');
                     },
                     error: function(error) {
                         console.log('Error:', error);

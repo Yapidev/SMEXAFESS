@@ -132,9 +132,7 @@
                     class="badge bg-light-primary text-primary fs-4 fw-semibold px-6 py-8 rounded">0</span>
             </div>
             <div class="position-relative">
-                @foreach ($comments as $comment)
                     <div id="comments-container"></div>
-                @endforeach
                 {{-- <div class="p-4 rounded-2 bg-light mb-3 ms-7">
                     <div class="d-flex align-items-center gap-3">
                         <img src="../../dist/images/profile/user-3.jpg" alt="" class="rounded-circle"
@@ -723,8 +721,8 @@
                         </a>
                     </li>`;
 
-                    var avatarUrl = comment.user.avatar 
-                    ? `${assetUrl}/${comment.user.avatar}` 
+                    var avatarUrl = comment.user.avatar
+                    ? `${assetUrl}/${comment.user.avatar}`
                     : `${assetUrl2}/images/profile/user-1.jpg`;
 
                     var commentHtml = `

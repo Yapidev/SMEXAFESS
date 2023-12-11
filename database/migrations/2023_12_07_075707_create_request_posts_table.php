@@ -9,13 +9,17 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('request_posts', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->text('content');
+            $table->string('from');
+            $table->string('to');
+            $table->text('message');
+            $table->string('photo')->nullable();
+            $table->enum('status', ['notapproved', 'approved']);
             $table->timestamps();
         });
     }
@@ -25,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('request_posts');
     }
 };

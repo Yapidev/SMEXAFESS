@@ -3,7 +3,9 @@
 use App\Http\Controllers\adminController;
 use App\Http\Controllers\authController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\requestPostController;
 use App\Http\Controllers\userController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,10 +19,6 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 // Route unauthorize user
 Route::middleware('guest')->controller(authController::class)->group(function () {
@@ -37,6 +35,7 @@ Route::middleware('guest')->controller(authController::class)->group(function ()
     Route::get('login/google/callback', 'handleGoogleCallback')->name('handleGoogleCallback');
     Route::post('sendResetLink', 'sendResetLink')->name('sendResetLink');
     Route::post('reset-password', 'updatePassword')->name('password.update');
+    Route::get('/', 'welcomePage')->name('welcome-page');
 });
 
 // Only middleware auth
@@ -57,10 +56,11 @@ Route::prefix('user')->middleware('auth', 'user')->controller(userController::cl
     Route::get('detail-post', 'detailPost')->name('user.detail-post');
     Route::get('get-comments', [CommentController::class, 'getComments'])->name('comments.get');
     Route::get('get-active-user-id', [CommentController::class, 'getActiveUserId'])->name('comments.getId');
-    
+
     // Return process
     Route::post('comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('comments/{id}', [CommentController::class, 'destroy'])->name('comments.delete');
+    Route::post('request-post', [requestPostController::class, 'requestPost'])->name('user.request-post');
 });
 
 // Route Admin

@@ -116,8 +116,8 @@ class authController extends Controller
                     'updated_at' => now(),
                 ];
 
-                $newUser = DB::table('users')->insertGetId($data);
-                Auth::loginUsingId($newUser);
+                $newUser = User::create($data);
+                Auth::login($newUser);
             }
 
             return redirect()->route('user.home')->with('success', 'Berhasil login!');
@@ -211,5 +211,10 @@ class authController extends Controller
         } catch (\Exception $e) {
             return back()->withErrors(['email' => 'Terjadi kesalahan saat memperbarui password.']);
         }
+    }
+
+    protected function welcomePage()
+    {
+        return response()->view('welcome');
     }
 }

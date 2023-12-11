@@ -6,13 +6,12 @@ use App\Traits\UUIDAsPrimaryKey;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Comment extends Model
+class RequestPost extends Model
 {
     use HasFactory, UUIDAsPrimaryKey;
-    protected $fillable = ['user_id', 'content'];
+    protected $guarded = ['id'];
 
-    public function user()
-    {
+    public function user() {
         return $this->belongsTo(User::class);
     }
 }

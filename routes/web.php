@@ -69,6 +69,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->controller(adminController:
     Route::get('home', 'homePage')->name('admin.home');
     Route::get('post-feed', 'postFeedPage')->name('admin.post-feed');
     Route::get('report-list', 'reportListPage')->name('admin.report-list');
+    Route::get('post-queue', 'postQueue')->name('admin.post-queue');
 
     // Return process
 });

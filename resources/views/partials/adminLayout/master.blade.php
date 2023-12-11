@@ -76,6 +76,15 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
+                            <a class="sidebar-link @if (request()->routeIs('admin.post-queue')) active @endif"
+                                href="{{ route('admin.post-queue') }}" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-briefcase"></i>
+                                </span>
+                                <span class="hide-menu">Post Queue</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
                             <a class="sidebar-link @if (request()->routeIs('admin.post-feed')) active @endif"
                                 href="{{ route('admin.post-feed') }}" aria-expanded="false">
                                 <span>

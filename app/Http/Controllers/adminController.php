@@ -26,4 +26,8 @@ class adminController extends Controller
     {
         return response()->view('Admin.reportList');
     }
+
+    protected function postQueue() {
+        return response()->view('Admin.postQueue');
+    }
 }

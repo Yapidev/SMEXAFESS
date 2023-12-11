@@ -32,12 +32,14 @@ class requestPostController extends Controller
 
             $userRequest = RequestPost::whereHas('user', function($query) {
                 $query->where('id', auth()->id());
-            })->whereDate('created_at', Carbon::today())->get();
+            })->whereDate('created_at', Carbon::today())->count();
 
-            if ($userRequest) {
+            if ($userRequest > 0) {
                 return response()->json(['error' => 'Gagal', 'message' => 'Kamu cuma bisa request sekali dalam sehari!'], 422);
             }
 
+            $nameImage = null;
+            
             if ($request->hasFile('photo')) {
                 $nameImage = $request->photo->store('post-photo', 'public');
             }
@@ -47,7 +49,7 @@ class requestPostController extends Controller
                 'from' => $request->from,
                 'to' => $request->to,
                 'message' => $request->message,
-                'photo' => $nameImage ?: null
+                'photo' => $nameImage
             ]);
 
             return response()->json(['success' => 'Berhasil request postingan!'], 200);

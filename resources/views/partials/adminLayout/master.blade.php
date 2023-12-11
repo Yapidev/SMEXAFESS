@@ -93,6 +93,15 @@
                                 <span class="hide-menu">Report List</span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link @if (request()->routeIs('admin.report-list')) active @endif"
+                                href="{{ route('admin.report-list') }}" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-report-search"></i>
+                                </span>
+                                <span class="hide-menu">Post dong min</span>
+                            </a>
+                        </li>
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->

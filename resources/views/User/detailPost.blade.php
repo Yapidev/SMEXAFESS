@@ -121,7 +121,10 @@
             <h4 class="mb-4 fw-semibold">Post Comments</h4>
             <form id="comment-form">
                 <textarea id="comment-content" class="form-control mb-4" rows="5"></textarea>
-                <button class="btn btn-primary">Kirim Komentar</button>
+                <button id="submit-comment" class="btn btn-primary">Kirim Komentar</button>
+                <div id="loading-spinner" class="spinner-border text-primary" role="status" style="display: none;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
             </form>
             <div class="d-flex align-items-center gap-3 mb-4 mt-7 pt-8">
                 <h4 class="mb-0 fw-semibold">Comments</h4>
@@ -593,49 +596,64 @@
     </script>
     <script>
         var assetUrl = "{{ asset('storage/') }}";
+        var assetUrl2 = "{{ asset('dist/') }}";
         var activeUserId;
+
 
         function showToastError(message) {
             toastr.error(message);
         }
 
-        var userCommentCount = parseInt(localStorage.getItem('userCommentCount')) || 0;
+        var userCommentCount = parseInt(sessionStorage.getItem('userCommentCount')) || 0;
 
         $(document).ready(function() {
-            $('#comment-form').submit(function(e) {
+            var commentForm = $('#comment-form');
+            var commentContent = $('#comment-content');
+            var submitButton = $('#submit-comment');
+            var loadingSpinner = $('#loading-spinner');
+
+            commentForm.submit(function(e) {
                 e.preventDefault();
 
-                if (userCommentCount >= 5) {
-                    showToastError('Anda telah mencapai batas maksimal komentar (5 kali).');
+                if (userCommentCount >= 30) {
+                    showToastError('Anda telah mencapai batas maksimal komentar (30 kali).');
                     return;
                 }
-                var commentContent = $('#comment-content').val().trim();
-                if (commentContent === '') {
+
+                var commentText = commentContent.val().trim();
+                if (commentText === '') {
                     showToastError('Kamu belum mengisi komentar!');
                     return;
                 }
 
-                addNewCommentToView(commentContent);
+                loadingSpinner.show();
+                submitButton.hide();
 
                 $.ajax({
                     type: 'POST',
                     url: '/user/comments',
                     data: {
                         '_token': $('meta[name="csrf-token"]').attr('content'),
-                        'content': commentContent,
+                        'content': commentText,
                     },
                     success: function(data) {
-                        $('#comment-content').val('');
+                        loadingSpinner.hide();
+                        submitButton.show();
+
+                        commentContent.val('');
 
                         getComments();
 
                         userCommentCount++;
-                        localStorage.setItem('userCommentCount', userCommentCount.toString());
+                        sessionStorage.setItem('userCommentCount', userCommentCount.toString());
 
                         toastr.success('Komentar berhasil dikirim');
                         console.log('data', data.comment);
                     },
                     error: function(error) {
+                        loadingSpinner.hide();
+                        submitButton.show();
+
                         console.log('Error:', error);
                     }
                 });
@@ -705,10 +723,14 @@
                         </a>
                     </li>`;
 
+                    var avatarUrl = comment.user.avatar 
+                    ? `${assetUrl}/${comment.user.avatar}` 
+                    : `${assetUrl2}/images/profile/user-1.jpg`;
+
                     var commentHtml = `
                 <div class="p-4 rounded-2 bg-light mb-3" id="comment-${comment.id}">
                     <div class="d-flex align-items-center gap-3">
-                        <img src="${assetUrl}/${comment.user.avatar}" alt="" class="rounded-circle" width="33" height="33">
+                        <img src="${avatarUrl}" alt="" class="rounded-circle" width="33" height="33" style="object-fit: cover">
                         <h6 class="fw-semibold mb-0 fs-4">${comment.user.name}</h6>
                         <div class="ms-auto">
                           <div class="dropdown">

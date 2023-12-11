@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('to');
             $table->text('message');
             $table->string('photo')->nullable();
-            $table->enum('status', ['notapproved', 'approved']);
+            $table->enum('status', ['notapproved', 'approved'])->default('notapproved');
             $table->timestamps();
         });
     }

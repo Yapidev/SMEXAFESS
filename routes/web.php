@@ -72,4 +72,5 @@ Route::prefix('admin')->middleware('auth', 'admin')->controller(adminController:
     Route::get('post-queue', 'postQueue')->name('admin.post-queue');
 
     // Return process
+    Route::patch('reject-post-queue/{id}', 'rejectPostQueue')->name('admin.reject-post-queue');
 });

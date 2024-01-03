@@ -1,6 +1,13 @@
 @extends('partials.userLayout.master')
 
 @section('style')
+<style>
+    .text-primary.disabled-link {
+        color: #007bff !important; /* Warna biru cerah */
+        cursor: not-allowed;
+        text-decoration: none;
+    }
+</style>
 @endsection
 
 @section('content')
@@ -89,12 +96,10 @@
                         </div>
                         <div class="mb-3">
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="check-faq" />
-                                <label class="form-check-label" for="customCheck1">Saya setuju
-                                    <a data-bs-toggle="modal" data-bs-target="#syarat-dan-ketentuan"
-                                        class="text-primary cursor-pointer">Syarat dan Ketentuannya
-                                    </a>
+                                <input type="checkbox" class="form-check-input" id="check-faq" disabled />
+                                <label class="form-check-label" for="check-faq">Saya setuju
                                 </label>
+                                <a data-bs-toggle="modal" data-bs-target="#syarat-dan-ketentuan" class="text-primary cursor-pointer">Syarat dan Ketentuannya</a>
                             </div>
                         </div>
                         <div class="mb-3 text-center">
@@ -162,7 +167,7 @@
                     </div>
                     <div class="mb-3 text-center">
                         <button class="btn btn-light-info text-info font-medium" id="agree-button" data-bs-toggle="modal"
-                            data-bs-target="#create-post-modal" type="button">
+                            data-bs-target="#create-post-modal" type="button" onclick="enableCheckbox()">
                             Saya setuju
                         </button>
                     </div>
@@ -242,5 +247,9 @@
                 });
             });
         });
+
+            function enableCheckbox() {
+            document.getElementById("check-faq").disabled = false;
+        }
     </script>
 @endsection

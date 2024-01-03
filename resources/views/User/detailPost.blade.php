@@ -76,12 +76,53 @@
     </div>
     <div class="card rounded-2 overflow-hidden">
         <div class="position-relative">
-            <div class="video-container" ondblclick="likePost(event)">
-                <!-- Gantilah dengan elemen video atau gambar TikTok Anda -->
-                <img src="../../dist/images/poto.png" class="card-img-top rounded-0 object-fit-cover" alt="..."
-                    height="100%">
-                <div id="heart-animation" class="heart-animation"></div>
-            </div>
+            <div
+                      id="carouselExampleControls"
+                      class="carousel slide carousel-dark"
+                      data-bs-ride="carousel"
+                    >
+                      <div class="carousel-inner">
+                        <div class="carousel-item active">
+                          <img
+                            src="../../dist/images/poto.png"
+                            class="d-block w-100"
+                            alt="..."
+                          />
+                        </div>
+                        <div class="carousel-item">
+                          <img
+                            src="../../dist/images/bututi.png"
+                            class="d-block w-100"
+                            alt="..."
+                          />
+                        </div>
+                        
+                      </div>
+                      <a
+                        class="carousel-control-prev"
+                        href="#carouselExampleControls"
+                        role="button"
+                        data-bs-slide="prev"
+                      >
+                        <span
+                          class="carousel-control-prev-icon"
+                          aria-hidden="true"
+                        ></span>
+                        <span class="visually-hidden">Previous</span>
+                      </a>
+                      <a
+                        class="carousel-control-next"
+                        href="#carouselExampleControls"
+                        role="button"
+                        data-bs-slide="next"
+                      >
+                        <span
+                          class="carousel-control-next-icon"
+                          aria-hidden="true"
+                        ></span>
+                        <span class="visually-hidden">Next</span>
+                      </a>
+                    </div>
             <span
                 class="badge bg-white text-dark fs-2 rounded-4 lh-sm mb-9 me-9 py-1 px-2 fw-semibold position-absolute bottom-0 end-0">2
                 Menit Lalu</span>
@@ -94,7 +135,7 @@
                     <i class="fas fa-heart fs-5"></i>
                     <span id="like-count">1392</span>
                 </div>
-                <div class="d-flex align-items-center gap-2"><i class="ti ti-message-2 text-dark fs-5"></i>3</div>
+                <div class="d-flex align-items-center gap-2"><i class="ti ti-share-2 text-dark fs-5"></i>3</div>
                 <div class="d-flex align-items-center fs-2 ms-auto"><i class="ti ti-point text-dark"></i>Senin, Dec 23</div>
             </div>
         </div>
